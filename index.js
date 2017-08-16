@@ -1,6 +1,7 @@
 const amqplib = require('amqplib')
 
 const defaultOptions = {
+  amqpOptions: {},
   reconnectDelaySecond: 30,
   keepRequestsInMemoryWhileConnecting: false // /!\ if true, may cause memory overflow
 }
@@ -12,7 +13,7 @@ function NotifmeRabbitMq (url, options) {
   let connecting = true
 
   function connect () {
-    return amqplib.connect(url)
+    return amqplib.connect(url, mergedOptions.amqpOptions)
       .then(function (connection) {
         connection.on('error', reconnect)
         connection.on('close', reconnect)
