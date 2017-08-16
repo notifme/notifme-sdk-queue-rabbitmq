@@ -34,89 +34,80 @@ $ yarn add notifme-sdk notifme-sdk-queue-rabbitmq
 ```
 
 ```javascript
-import NotifmeSdk from 'notifme-sdk'
-import rabbitMq from 'notifme-sdk-queue-rabbitmq'
+// In your application
+import {NotifmeRabbitMqProducer} from 'notifme-sdk-queue-rabbitmq'
 
-const notifmeSdk = new NotifmeSdk({
-  requestQueue: rabbitMq('amqp://localhost'),
-  runWorker: true, // consumer will start on the same instance than producer
-  channels: {
-    sms: {
-      providers: [{type: 'logger'}]
-    }
-  },
-  onError: function (result, request) {
-    if (result.errors && result.errors.queue) {
-      /*
-       * Queue system is down! Decide what to do in this case. You can either:
-       * - Send notifications with this instance (code below)
-       * - Use an alternative queue system (and run a worker corresponding to the queue)
-       * - (To simply retry later, pass `keepRequestsInMemoryWhileConnecting: true` in the options)
-       */
-      notifmeSdk.sender.send(request) // providers need to be defined in NotifmeSdk options
-    }
-    // Also handle provider errors...
-  }
+const notificationService = new NotifmeRabbitMqProducer({
+  url: 'amqp://localhost'
 })
 
-notifmeSdk
-  .send({sms: {from: '+15000000000', to: '+15000000001', text: 'Hello, how are you?'}})
-  .then(console.log)
+notificationService.enqueueNotification({
+  sms: {from: '+15000000000', to: '+15000000001', text: 'Hello, how are you?'}
+})
 ```
+
+```javascript
+// In your worker
+import NotifmeSdk from 'notifme-sdk'
+import {NotifmeRabbitMqConsumer} from 'notifme-sdk-queue-rabbitmq'
+
+const notifmeSdk = new NotifmeSdk({
+  // Define all your providers here.
+  // (see documentation: https://github.com/notifme/notifme-sdk#2-providers)
+})
+
+const notifmeWorker = new NotifmeRabbitMqConsumer(notifmeSdk, {
+  url: 'amqp://localhost'
+})
+notifmeWorker.run()
+
+```
+
+See a [complete working example](https://github.com/notifme/notifme-sdk-queue-rabbitmq/tree/master/example) for more details.
 
 ## How to use
 
-### Options
+### Producer options
 
 ```javascript
-new NotifmeSdk({
-  requestQueue: rabbitMq('URL (Example: amqp://localhost)', {
-    amqpOptions: ...,
-    reconnectDelaySecond: ...,
-    keepRequestsInMemoryWhileConnecting: ...
-  }),
-  ...
+new NotifmeRabbitMqProducer({
+  keepRequestsInMemoryWhileConnecting: ...,
+  url: ...,
+  amqpOptions: ...,
+  queueName: ...,
+  isPersistent: ...,
+  reconnectDelaySecond: ...
 })
 ```
 
-| Option name | Required | Type | Description |
+| Option name | Type | Default | Description |
 | --- | --- | --- | --- |
-| `amqpOptions` | `false` | `Object` | Connection options. See [amqplib documentation](http://www.squaremobius.net/amqp.node/channel_api.html#connect). |
-| `reconnectDelaySecond` | `false` | `number` | <i>Default: `30`.</i><br>Time in second to wait between two reconnection tries. |
-| `keepRequestsInMemoryWhileConnecting` | `false` | `boolean` | <i>Default: `false`.</i><br>Should the requests be kept in memory while queue is (re)connecting? If set to `true`, may cause memory overflow. |
+| `keepRequestsInMemoryWhileConnecting` | `boolean` | `false` | Should the requests be kept in memory while queue is (re)connecting? If set to `true`, may cause memory overflow. |
+| `url` | `string` | `'amqp://localhost'` | RabbitMQ URL. See [amqplib documentation](http://www.squaremobius.net/amqp.node/channel_api.html#connect). |
+| `amqpOptions` | `Object` | `{}` | Connection options. See [amqplib documentation](http://www.squaremobius.net/amqp.node/channel_api.html#connect). |
+| `queueName` | `string` | `'notifme:request'` | Name of the queue to use. |
+| `isPersistent` | `boolean` | `true` | Is the queue persistent? |
+| `reconnectDelaySecond` | `number` | `30` | Time in second to wait between two reconnection tries. |
 
-See also [Notif.me documentation](https://github.com/notifme/notifme-sdk).
-
-### Use workers to send notifications
-
-Use `runWorker: false` in the configuration of Notif.me SDK.
-
-```javascript
-// Producer
-const notifmeSdk = new NotifmeSdk({
-  requestQueue: rabbitMq('amqp://localhost'),
-  runWorker: false
-})
-
-notifmeSdk.send(...)
-```
+### Consumer options
 
 ```javascript
-// Consumer
-import NotifmeWorker from 'notifme-sdk/lib/worker'
-
-const notifmeWorker = new NotifmeWorker({
-  requestQueue: rabbitMq('amqp://localhost'),
-  channels: {
-    email: {
-      providers: [{type: 'logger'}]
-    }
-  }
+new NotifmeRabbitMqConsumer({
+  url: ...,
+  amqpOptions: ...,
+  queueName: ...,
+  isPersistent: ...,
+  reconnectDelaySecond: ...
 })
-notifmeWorker.run()
 ```
 
-See a [working example](https://github.com/notifme/notifme-sdk-queue-rabbitmq/tree/master/example) for more details.
+| Option name | Type | Default | Description |
+| --- | --- | --- | --- |
+| `url` | `string` | `'amqp://localhost'` | RabbitMQ URL. See [amqplib documentation](http://www.squaremobius.net/amqp.node/channel_api.html#connect). |
+| `amqpOptions` | `Object` | `{}` | Connection options. See [amqplib documentation](http://www.squaremobius.net/amqp.node/channel_api.html#connect). |
+| `queueName` | `string` | `'notifme:request'` | Name of the queue to use. |
+| `isPersistent` | `boolean` | `true` | Is the queue persistent? |
+| `reconnectDelaySecond` | `number` | `30` | Time in second to wait between two reconnection tries. |
 
 ## Contributing
 
