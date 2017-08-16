@@ -1,6 +1,6 @@
 /* @flow */
 const NotifmeWorker = require('notifme-sdk/lib/worker').default
-const rabbitMq = require('..').default // notifme-sdk-queue-rabbitmq
+const rabbitMq = require('../src').default // notifme-sdk-queue-rabbitmq
 
 const notifmeWorker = new NotifmeWorker({
   requestQueue: rabbitMq('amqp://localhost'),
