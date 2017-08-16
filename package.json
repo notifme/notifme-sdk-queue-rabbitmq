@@ -1,6 +1,6 @@
 {
   "name": "notifme-sdk-queue-rabbitmq",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "RabbitMQ plugin for Notif.me SDK",
   "main": "lib/index.js",
   "repository": "https://github.com/notifme/notifme-sdk-queue-rabbitmq",
