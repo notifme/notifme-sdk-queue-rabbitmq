@@ -2,10 +2,8 @@
 const NotifmeSdk = require('notifme-sdk').default
 const rabbitMq = require('..').default // notifme-sdk-queue-rabbitmq
 
-const requestQueue = rabbitMq('amqp://localhost')
-
 const notifmeSdk = new NotifmeSdk({
-  requestQueue,
+  requestQueue: rabbitMq('amqp://localhost'),
   runWorker: false,
   channels: {
     email: {
