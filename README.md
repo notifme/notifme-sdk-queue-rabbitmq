@@ -56,7 +56,6 @@ $ yarn add notifme-sdk notifme-sdk-queue-rabbitmq
 ```
 
 ```javascript
-// In your worker
 import NotifmeSdk from 'notifme-sdk'
 import NotifmeRabbitMqConsumer from 'notifme-sdk-queue-rabbitmq/lib/consumer'
 
