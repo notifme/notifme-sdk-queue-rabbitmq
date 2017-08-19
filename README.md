@@ -31,12 +31,13 @@
 
 ## Getting Started
 
+### In your application
+
 ```shell
-$ yarn add notifme-sdk notifme-sdk-queue-rabbitmq
+$ yarn add notifme-sdk-queue-rabbitmq
 ```
 
 ```javascript
-// In your application
 import NotifmeRabbitMqProducer from 'notifme-sdk-queue-rabbitmq/lib/producer'
 
 const notificationService = new NotifmeRabbitMqProducer({
@@ -46,6 +47,12 @@ const notificationService = new NotifmeRabbitMqProducer({
 notificationService.enqueueNotification({
   sms: {from: '+15000000000', to: '+15000000001', text: 'Hello, how are you?'}
 })
+```
+
+### In your worker
+
+```shell
+$ yarn add notifme-sdk notifme-sdk-queue-rabbitmq
 ```
 
 ```javascript
@@ -62,7 +69,6 @@ const notifmeWorker = new NotifmeRabbitMqConsumer(notifmeSdk, {
   url: 'amqp://localhost'
 })
 notifmeWorker.run()
-
 ```
 
 See a [complete working example](https://github.com/notifme/notifme-sdk-queue-rabbitmq/tree/master/example) for more details.
