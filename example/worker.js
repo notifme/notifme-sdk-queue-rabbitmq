@@ -1,6 +1,6 @@
 /* @flow */
 import NotifmeSdk from 'notifme-sdk'
-import {NotifmeRabbitMqConsumer} from '../src' // notifme-sdk-queue-rabbitmq
+import NotifmeRabbitMqConsumer from '../src/consumer' // notifme-sdk-queue-rabbitmq/lib/consumer
 
 const notifmeSdk = new NotifmeSdk({
   channels: {

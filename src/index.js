@@ -1,6 +1,9 @@
 /* @flow */
-import Consumer from './consumer'
-import Producer from './producer'
 
-export const NotifmeRabbitMqConsumer = Consumer
-export const NotifmeRabbitMqProducer = Producer
+export function getNotifmeConsumer () {
+  return require('./consumer').default
+}
+
+export function getNotifmeProducer () {
+  return require('./producer').default
+}

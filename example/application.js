@@ -1,5 +1,5 @@
 /* @flow */
-import {NotifmeRabbitMqProducer} from '../src' // notifme-sdk-queue-rabbitmq
+import NotifmeRabbitMqProducer from '../src/producer' // notifme-sdk-queue-rabbitmq/lib/producer
 
 const notificationService = new NotifmeRabbitMqProducer({
   url: 'amqp://localhost'

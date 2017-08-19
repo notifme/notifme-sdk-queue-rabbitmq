@@ -18,11 +18,12 @@
     "prepublish": "yarn run build",
     "test": "yarn run lint"
   },
-  "peerDependencies": {
-    "notifme-sdk": "^0"
+  "optionalDependencies": {
+    "notifme-sdk": "^0.2.1"
   },
   "dependencies": {
-    "amqplib": "^0.5.1"
+    "amqplib": "^0.5.1",
+    "babel-runtime": "^6.26.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

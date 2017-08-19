@@ -37,7 +37,7 @@ $ yarn add notifme-sdk notifme-sdk-queue-rabbitmq
 
 ```javascript
 // In your application
-import {NotifmeRabbitMqProducer} from 'notifme-sdk-queue-rabbitmq'
+import NotifmeRabbitMqProducer from 'notifme-sdk-queue-rabbitmq/lib/producer'
 
 const notificationService = new NotifmeRabbitMqProducer({
   url: 'amqp://localhost'
@@ -51,7 +51,7 @@ notificationService.enqueueNotification({
 ```javascript
 // In your worker
 import NotifmeSdk from 'notifme-sdk'
-import {NotifmeRabbitMqConsumer} from 'notifme-sdk-queue-rabbitmq'
+import NotifmeRabbitMqConsumer from 'notifme-sdk-queue-rabbitmq/lib/consumer'
 
 const notifmeSdk = new NotifmeSdk({
   // Define all your providers here.
