@@ -46,7 +46,7 @@ const notificationService = new NotifmeRabbitMqProducer({
 
 notificationService.enqueueNotification({
   sms: {from: '+15000000000', to: '+15000000001', text: 'Hello, how are you?'}
-})
+}).catch(console.error)
 ```
 
 ### In your worker
@@ -60,14 +60,26 @@ import NotifmeSdk from 'notifme-sdk'
 import NotifmeRabbitMqConsumer from 'notifme-sdk-queue-rabbitmq/lib/consumer'
 
 const notifmeSdk = new NotifmeSdk({
-  // Define all your providers here.
-  // (see documentation: https://github.com/notifme/notifme-sdk#2-providers)
+  /*
+   * Define all your providers here.
+   * (see documentation: https://github.com/notifme/notifme-sdk#2-providers)
+   */
 })
 
 const notifmeWorker = new NotifmeRabbitMqConsumer(notifmeSdk, {
   url: 'amqp://localhost'
 })
-notifmeWorker.run()
+
+notifmeWorker.run(async (request) => {
+  const result = await notifmeSdk.send(request)
+  if (result.status === 'error') {
+    /*
+     * Some channels of this request have errors.
+     * Which means all your providers failed for these channels.
+     * Do you want to retry failing channels by enqueing to a delayed queue?
+     */
+  }
+})
 ```
 
 See a [complete working example](https://github.com/notifme/notifme-sdk-queue-rabbitmq/tree/master/example) for more details.
