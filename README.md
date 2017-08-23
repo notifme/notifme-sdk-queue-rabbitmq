@@ -66,7 +66,7 @@ const notifmeSdk = new NotifmeSdk({
    */
 })
 
-const notifmeWorker = new NotifmeRabbitMqConsumer(notifmeSdk, {
+const notifmeWorker = new NotifmeRabbitMqConsumer({
   url: 'amqp://localhost'
 })
 
