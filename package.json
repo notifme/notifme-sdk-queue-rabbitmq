@@ -24,15 +24,15 @@
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
-    "babel-eslint": "^7.2.3",
+    "babel-eslint": "^8.0.1",
     "babel-plugin-transform-flow-strip-types": "^6.22.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-register": "^6.24.1",
-    "flow-bin": "^0.53.0",
+    "flow-bin": "^0.56.0",
     "nodemon": "^1.11.0",
-    "notifme-sdk": "^0.2.1",
+    "notifme-sdk": "^1.5.0",
     "standard": "^10.0.3"
   },
   "files": [
