@@ -23,6 +23,8 @@
 
 ## Features
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/notifme/notifme-sdk-queue-rabbitmq.svg)](https://greenkeeper.io/)
+
 * **Easy integration** — Just plug and play.
 
 * **Breakdown management** — Try to reconnect automatically if connection to queue is lost, and let you choose what to do with notification requests in the meantime.
