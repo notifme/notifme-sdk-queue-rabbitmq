@@ -40,8 +40,20 @@ export default class RabbitMqQueue {
     const {url, amqpOptions, reconnectDelaySecond} = this.options
     try {
       const connection = await amqplib.connect(url, amqpOptions)
-      connection.on('error', () => this.reconnect())
-      connection.on('close', () => this.reconnect())
+
+      let connectionRestoring = true;
+      connection.on('error', () => {
+        if (connectionRestoring) {
+          connectionRestoring = false
+          this.reconnect()
+        }
+      })
+      connection.on('close', () => {
+        if (connectionRestoring){
+          connectionRestoring = false
+          this.reconnect()
+        }
+      })
 
       console.log('[RabbitMQ] Connection successful.')
       this.connecting = false
